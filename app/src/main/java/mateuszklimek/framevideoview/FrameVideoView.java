@@ -6,6 +6,7 @@ import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.Surface;
 import android.view.TextureView;
@@ -16,9 +17,9 @@ import android.widget.VideoView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FrameVideoView extends LinearLayout implements MediaPlayer.OnInfoListener {
+public class FrameVideoView extends LinearLayout {
 
-    private VideoViewImpl impl;
+    private Impl impl;
     private View placeholder;
     private int videoResource;
 
@@ -34,65 +35,51 @@ public class FrameVideoView extends LinearLayout implements MediaPlayer.OnInfoLi
         impl = getImplInstance(context, attrs);
     }
 
-    private VideoViewImpl getImplInstance(Context context){
+    private Impl getImplInstance(Context context){
         if(Build.VERSION.SDK_INT >= 14){
-            final TextureVideoViewImpl textureVideoPlayback = new TextureVideoViewImpl(context);
+            final TextureViewImpl textureVideoPlayback = new TextureViewImpl(context);
             addView(textureVideoPlayback);
             return textureVideoPlayback;
         } else{
-            final VideoViewViewImpl videoViewPlayback = new VideoViewViewImpl(context);
+            final VideoViewImpl videoViewPlayback = new VideoViewImpl(context);
             addView(videoViewPlayback);
             return videoViewPlayback;
         }
     }
 
-    private VideoViewImpl getImplInstance(Context context, AttributeSet attrs){
+    private Impl getImplInstance(Context context, AttributeSet attrs){
         if(Build.VERSION.SDK_INT >= 14){
-            final TextureVideoViewImpl textureVideoPlayback = new TextureVideoViewImpl(context, attrs);
+            final TextureViewImpl textureVideoPlayback = new TextureViewImpl(context, attrs);
             addView(textureVideoPlayback);
             return textureVideoPlayback;
         } else{
-            final VideoViewViewImpl videoViewPlayback = new VideoViewViewImpl(context, attrs);
+            final VideoViewImpl videoViewPlayback = new VideoViewImpl(context, attrs);
             addView(videoViewPlayback);
             return videoViewPlayback;
         }
     }
 
-    public void setup(View root, int resource) {
+    public void setup(View videoFrame, int resource) {
         this.videoResource = resource;
-        placeholder = root.findViewById(R.id.video_view_placeholder);
+        placeholder = videoFrame.findViewById(R.id.video_view_placeholder);
     }
 
     public void onResume(){
-        LOG.trace("onResume");
         impl.onResume();
     }
 
     public void onPause(){
-        LOG.trace("onPause");
         impl.onPause();
     }
 
-
-    @Override
-    public boolean onInfo(MediaPlayer mp, int what, int extra) {
-        LOG.trace("onInfo what={}, extra={}", what, extra);
-        if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-            LOG.trace("[MEDIA_INFO_VIDEO_RENDERING_START] placeholder GONE");
-            placeholder.setVisibility(View.GONE);
-            return true;
-        }
-        return false;
-    }
-
-    private interface VideoViewImpl {
+    private interface Impl {
         void onResume();
         void onPause();
     }
 
     @TargetApi(14)
-    class TextureVideoViewImpl extends TextureView implements
-            VideoViewImpl,
+    class TextureViewImpl extends TextureView implements
+            Impl,
             MediaPlayer.OnPreparedListener,
             TextureView.SurfaceTextureListener,
             MediaPlayer.OnBufferingUpdateListener {
@@ -102,12 +89,12 @@ public class FrameVideoView extends LinearLayout implements MediaPlayer.OnInfoLi
         private boolean prepared;
         private boolean startInPrepare;
 
-        TextureVideoViewImpl(Context context) {
+        TextureViewImpl(Context context) {
             super(context);
             setSurfaceTextureListener(this);
         }
 
-        TextureVideoViewImpl(Context context, AttributeSet attrs) {
+        TextureViewImpl(Context context, AttributeSet attrs) {
             super(context, attrs);
             setSurfaceTextureListener(this);
         }
@@ -137,7 +124,7 @@ public class FrameVideoView extends LinearLayout implements MediaPlayer.OnInfoLi
                 mediaPlayer.setDataSource(getContext(), Uri.parse(uriString));
                 mediaPlayer.setSurface(surface);
                 mediaPlayer.setOnPreparedListener(this);
-                mediaPlayer.setOnInfoListener(FrameVideoView.this);
+                mediaPlayer.setOnInfoListener(infoListener);
                 mediaPlayer.setOnBufferingUpdateListener(this);
                 mediaPlayer.prepare();
             } catch (Exception e) {
@@ -192,28 +179,54 @@ public class FrameVideoView extends LinearLayout implements MediaPlayer.OnInfoLi
         }
     }
 
-    class VideoViewViewImpl extends VideoView implements VideoViewImpl {
+    class VideoViewImpl extends VideoView implements Impl, MediaPlayer.OnPreparedListener {
 
-        public VideoViewViewImpl(Context context) {
+        private Handler handler = new Handler();
+
+        public VideoViewImpl(Context context) {
             super(context);
+            setOnPreparedListener(this);
         }
 
-        public VideoViewViewImpl(Context context, AttributeSet attrs) {
+        public VideoViewImpl(Context context, AttributeSet attrs) {
             super(context, attrs);
+            setOnPreparedListener(this);
+            //setVideoURI(Uri.parse("android.resource://" + getContext().getPackageName() + "/" + videoResource));
         }
 
-        public VideoViewViewImpl(Context context, AttributeSet attrs, int defStyleAttr) {
+        public VideoViewImpl(Context context, AttributeSet attrs, int defStyleAttr) {
             super(context, attrs, defStyleAttr);
+            setOnPreparedListener(this);
         }
 
         @Override
         public void onResume() {
-
+            setVideoURI(Uri.parse("android.resource://" + getContext().getPackageName() + "/" + videoResource));
+            start();
         }
 
         @Override
         public void onPause() {
+            placeholder.setVisibility(View.VISIBLE);
+            stopPlayback();
+        }
 
+        @Override
+        public void onPrepared(MediaPlayer mediaPlayer) {
+            mediaPlayer.setOnInfoListener(infoListener);
         }
     }
+
+    private MediaPlayer.OnInfoListener infoListener = new MediaPlayer.OnInfoListener() {
+        @Override
+        public boolean onInfo(MediaPlayer mp, int what, int extra) {
+            LOG.trace("onInfo what={}, extra={}", what, extra);
+            if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
+                LOG.trace("[MEDIA_INFO_VIDEO_RENDERING_START] placeholder GONE");
+                placeholder.setVisibility(View.GONE);
+                return true;
+            }
+            return false;
+        }
+    };
 }
