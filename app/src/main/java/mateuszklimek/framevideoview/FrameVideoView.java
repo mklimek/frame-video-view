@@ -19,10 +19,20 @@ import org.slf4j.LoggerFactory;
 
 public class FrameVideoView extends LinearLayout {
 
+    private interface Impl {
+        void onResume();
+        void onPause();
+    }
+
+    public enum ImplType {
+        TEXTURE_VIEW,
+        VIDEO_VIEW
+    }
+
     private Impl impl;
+    private ImplType type;
     private View placeholder;
     private int videoResource;
-    private ImplType type;
 
     private static final Logger LOG = LoggerFactory.getLogger(FrameVideoView.class.getSimpleName());
 
@@ -77,11 +87,6 @@ public class FrameVideoView extends LinearLayout {
         impl.onPause();
     }
 
-    private interface Impl {
-        void onResume();
-        void onPause();
-    }
-
     public ImplType getImplType() {
         return type;
     }
@@ -106,11 +111,6 @@ public class FrameVideoView extends LinearLayout {
                 break;
         }
         onResume();
-    }
-
-    public enum ImplType{
-        TEXTURE_VIEW,
-        VIDEO_VIEW
     }
 
     @TargetApi(14)
