@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     android:id="@+id/video_frame"
-    android:layout_alignParentTop="true"
-    android:layout_marginTop="10dp"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:layout_width="@dimen/video_width"
+    android:layout_height="@dimen/video_height"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.everytap.FrameVideoView
-        android:id="@+id/video_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <mateuszklimek.framevideoview.FrameVideoView
+        android:id="@+id/frame_video_view"
+        android:layout_width="@dimen/video_width"
+        android:layout_height="@dimen/video_height"
         android:visibility="visible"
         />
 
     <FrameLayout
         android:id="@+id/video_view_placeholder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffffff"
+        android:layout_width="@dimen/video_width"
+        android:layout_height="@dimen/video_height"
+        android:background="@color/background"
         />
 
 </FrameLayout>

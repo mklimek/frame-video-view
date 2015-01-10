@@ -5,4 +5,6 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <color name="background">#886df7</color>
+
 </resources>

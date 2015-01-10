@@ -10,12 +10,13 @@ import android.util.AttributeSet;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.VideoView;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FrameVideoView extends View implements MediaPlayer.OnInfoListener {
+public class FrameVideoView extends LinearLayout implements MediaPlayer.OnInfoListener {
 
     private VideoPlayback videoPlayback;
     private View placeholder;
@@ -33,32 +34,27 @@ public class FrameVideoView extends View implements MediaPlayer.OnInfoListener {
         videoPlayback = getVideoPlaybackInstance(context, attrs);
     }
 
-    public FrameVideoView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        videoPlayback = getVideoPlaybackInstance(context, attrs, defStyleAttr);
-    }
-
     private VideoPlayback getVideoPlaybackInstance(Context context){
         if(Build.VERSION.SDK_INT >= 14){
-            return new TextureVideoPlayback(context);
+            final TextureVideoPlayback textureVideoPlayback = new TextureVideoPlayback(context);
+            addView(textureVideoPlayback);
+            return textureVideoPlayback;
         } else{
-            return new VideoViewPlayback(context);
+            final VideoViewPlayback videoViewPlayback = new VideoViewPlayback(context);
+            addView(videoViewPlayback);
+            return videoViewPlayback;
         }
     }
 
     private VideoPlayback getVideoPlaybackInstance(Context context, AttributeSet attrs){
         if(Build.VERSION.SDK_INT >= 14){
-            return new TextureVideoPlayback(context, attrs);
+            final TextureVideoPlayback textureVideoPlayback = new TextureVideoPlayback(context, attrs);
+            addView(textureVideoPlayback);
+            return textureVideoPlayback;
         } else{
-            return new VideoViewPlayback(context, attrs);
-        }
-    }
-
-    private VideoPlayback getVideoPlaybackInstance(Context context, AttributeSet attrs, int defStyleAttr){
-        if(Build.VERSION.SDK_INT >= 14){
-            return new TextureVideoPlayback(context, attrs, defStyleAttr);
-        } else{
-            return new VideoViewPlayback(context, attrs, defStyleAttr);
+            final VideoViewPlayback videoViewPlayback = new VideoViewPlayback(context, attrs);
+            addView(videoViewPlayback);
+            return videoViewPlayback;
         }
     }
 
@@ -113,11 +109,6 @@ public class FrameVideoView extends View implements MediaPlayer.OnInfoListener {
 
         TextureVideoPlayback(Context context, AttributeSet attrs) {
             super(context, attrs);
-            setSurfaceTextureListener(this);
-        }
-
-        TextureVideoPlayback(Context context, AttributeSet attrs, int defStyleAttr) {
-            super(context, attrs, defStyleAttr);
             setSurfaceTextureListener(this);
         }
 
@@ -184,7 +175,7 @@ public class FrameVideoView extends View implements MediaPlayer.OnInfoListener {
             }
 
             if(isAvailable()){
-                onSurfaceTextureAvailable(getSurfaceTexture(),0,0);
+                onSurfaceTextureAvailable(getSurfaceTexture(), 0, 0);
             }
         }
 
