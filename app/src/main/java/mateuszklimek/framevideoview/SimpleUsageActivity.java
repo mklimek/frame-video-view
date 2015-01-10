@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 public class SimpleUsageActivity extends Activity {
 
@@ -16,11 +17,11 @@ public class SimpleUsageActivity extends Activity {
 
         videoView = (FrameVideoView) findViewById(R.id.frame_video_view);
         videoView.setup(findViewById(R.id.video_frame), R.raw.fb);
-
-        setupButton();
+        videoView.setImpl(this, FrameVideoView.ImplType.VIDEO_VIEW);
+        setupOtherViews();
     }
 
-    private void setupButton() {
+    private void setupOtherViews() {
         View button = findViewById(R.id.change_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,6 +29,9 @@ public class SimpleUsageActivity extends Activity {
                 startActivity(new Intent(SimpleUsageActivity.this, ViewPagerActivity.class));
             }
         });
+
+        TextView info = (TextView) findViewById(R.id.info);
+        info.setText(videoView.getImplType().name());
     }
 
     @Override

@@ -5,6 +5,7 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <color name="black">#000000</color>
     <color name="background">#886df7</color>
 
 </resources>

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class VideoFragment extends Fragment {
 
@@ -17,6 +18,7 @@ public class VideoFragment extends Fragment {
         int position = getArguments().getInt("position");
         View root = inflater.inflate(R.layout.simple, container, false);
         videoView = (FrameVideoView) root.findViewById(R.id.frame_video_view);
+        //videoView.setImpl(inflater.getContext(), FrameVideoView.ImplType.VIDEO_VIEW);
         switch (position){
             case 0:
                 videoView.setup(root.findViewById(R.id.video_frame), R.raw.fb);
@@ -28,6 +30,11 @@ public class VideoFragment extends Fragment {
                 videoView.setup(root.findViewById(R.id.video_frame), R.raw.fb);
                 break;
         }
+        setupOtherViews(root);
+        return root;
+    }
+
+    private void setupOtherViews(View root) {
         final Button button = (Button) root.findViewById(R.id.change_button);
         button.setText("Back to simple Activity");
         button.setOnClickListener(new View.OnClickListener() {
@@ -36,7 +43,9 @@ public class VideoFragment extends Fragment {
                 getActivity().finish();
             }
         });
-        return root;
+
+        TextView info = (TextView) root.findViewById(R.id.info);
+        info.setText(videoView.getImplType().name());
     }
 
     @Override

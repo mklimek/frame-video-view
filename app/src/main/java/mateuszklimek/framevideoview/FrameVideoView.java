@@ -22,6 +22,7 @@ public class FrameVideoView extends LinearLayout {
     private Impl impl;
     private View placeholder;
     private int videoResource;
+    private ImplType type;
 
     private static final Logger LOG = LoggerFactory.getLogger(FrameVideoView.class.getSimpleName());
 
@@ -37,10 +38,12 @@ public class FrameVideoView extends LinearLayout {
 
     private Impl getImplInstance(Context context){
         if(Build.VERSION.SDK_INT >= 14){
+            type = ImplType.TEXTURE_VIEW;
             final TextureViewImpl textureVideoPlayback = new TextureViewImpl(context);
             addView(textureVideoPlayback);
             return textureVideoPlayback;
         } else{
+            type = ImplType.VIDEO_VIEW;
             final VideoViewImpl videoViewPlayback = new VideoViewImpl(context);
             addView(videoViewPlayback);
             return videoViewPlayback;
@@ -49,10 +52,12 @@ public class FrameVideoView extends LinearLayout {
 
     private Impl getImplInstance(Context context, AttributeSet attrs){
         if(Build.VERSION.SDK_INT >= 14){
+            type = ImplType.TEXTURE_VIEW;
             final TextureViewImpl textureVideoPlayback = new TextureViewImpl(context, attrs);
             addView(textureVideoPlayback);
             return textureVideoPlayback;
         } else{
+            type = ImplType.VIDEO_VIEW;
             final VideoViewImpl videoViewPlayback = new VideoViewImpl(context, attrs);
             addView(videoViewPlayback);
             return videoViewPlayback;
@@ -75,6 +80,33 @@ public class FrameVideoView extends LinearLayout {
     private interface Impl {
         void onResume();
         void onPause();
+    }
+
+    public ImplType getImplType() {
+        return type;
+    }
+
+    public void setImpl(Context context, ImplType implType){
+        removeAllViews();
+        type = implType;
+        switch (implType){
+            case TEXTURE_VIEW:
+                final TextureViewImpl textureView = new TextureViewImpl(context);
+                addView(textureView);
+                impl = textureView;
+                break;
+            case VIDEO_VIEW:
+                VideoViewImpl videoView = new VideoViewImpl(context);
+                addView(videoView);
+                impl = videoView;
+                break;
+        }
+        onResume();
+    }
+
+    public enum ImplType{
+        TEXTURE_VIEW,
+        VIDEO_VIEW
     }
 
     @TargetApi(14)
