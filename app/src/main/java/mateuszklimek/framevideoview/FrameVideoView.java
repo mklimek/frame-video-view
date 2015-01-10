@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 public class FrameVideoView extends LinearLayout implements MediaPlayer.OnInfoListener {
 
-    private VideoPlayback videoPlayback;
+    private VideoViewImpl impl;
     private View placeholder;
     private int videoResource;
 
@@ -26,33 +26,33 @@ public class FrameVideoView extends LinearLayout implements MediaPlayer.OnInfoLi
 
     public FrameVideoView(Context context) {
         super(context);
-        videoPlayback = getVideoPlaybackInstance(context);
+        impl = getImplInstance(context);
     }
 
     public FrameVideoView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        videoPlayback = getVideoPlaybackInstance(context, attrs);
+        impl = getImplInstance(context, attrs);
     }
 
-    private VideoPlayback getVideoPlaybackInstance(Context context){
+    private VideoViewImpl getImplInstance(Context context){
         if(Build.VERSION.SDK_INT >= 14){
-            final TextureVideoPlayback textureVideoPlayback = new TextureVideoPlayback(context);
+            final TextureVideoViewImpl textureVideoPlayback = new TextureVideoViewImpl(context);
             addView(textureVideoPlayback);
             return textureVideoPlayback;
         } else{
-            final VideoViewPlayback videoViewPlayback = new VideoViewPlayback(context);
+            final VideoViewViewImpl videoViewPlayback = new VideoViewViewImpl(context);
             addView(videoViewPlayback);
             return videoViewPlayback;
         }
     }
 
-    private VideoPlayback getVideoPlaybackInstance(Context context, AttributeSet attrs){
+    private VideoViewImpl getImplInstance(Context context, AttributeSet attrs){
         if(Build.VERSION.SDK_INT >= 14){
-            final TextureVideoPlayback textureVideoPlayback = new TextureVideoPlayback(context, attrs);
+            final TextureVideoViewImpl textureVideoPlayback = new TextureVideoViewImpl(context, attrs);
             addView(textureVideoPlayback);
             return textureVideoPlayback;
         } else{
-            final VideoViewPlayback videoViewPlayback = new VideoViewPlayback(context, attrs);
+            final VideoViewViewImpl videoViewPlayback = new VideoViewViewImpl(context, attrs);
             addView(videoViewPlayback);
             return videoViewPlayback;
         }
@@ -65,12 +65,12 @@ public class FrameVideoView extends LinearLayout implements MediaPlayer.OnInfoLi
 
     public void onResume(){
         LOG.trace("onResume");
-        videoPlayback.onResume();
+        impl.onResume();
     }
 
     public void onPause(){
         LOG.trace("onPause");
-        videoPlayback.onPause();
+        impl.onPause();
     }
 
 
@@ -85,14 +85,14 @@ public class FrameVideoView extends LinearLayout implements MediaPlayer.OnInfoLi
         return false;
     }
 
-    private interface VideoPlayback{
+    private interface VideoViewImpl {
         void onResume();
         void onPause();
     }
 
     @TargetApi(14)
-    class TextureVideoPlayback extends TextureView implements
-            VideoPlayback,
+    class TextureVideoViewImpl extends TextureView implements
+            VideoViewImpl,
             MediaPlayer.OnPreparedListener,
             TextureView.SurfaceTextureListener,
             MediaPlayer.OnBufferingUpdateListener {
@@ -102,12 +102,12 @@ public class FrameVideoView extends LinearLayout implements MediaPlayer.OnInfoLi
         private boolean prepared;
         private boolean startInPrepare;
 
-        TextureVideoPlayback(Context context) {
+        TextureVideoViewImpl(Context context) {
             super(context);
             setSurfaceTextureListener(this);
         }
 
-        TextureVideoPlayback(Context context, AttributeSet attrs) {
+        TextureVideoViewImpl(Context context, AttributeSet attrs) {
             super(context, attrs);
             setSurfaceTextureListener(this);
         }
@@ -192,17 +192,17 @@ public class FrameVideoView extends LinearLayout implements MediaPlayer.OnInfoLi
         }
     }
 
-    class VideoViewPlayback extends VideoView implements VideoPlayback{
+    class VideoViewViewImpl extends VideoView implements VideoViewImpl {
 
-        public VideoViewPlayback(Context context) {
+        public VideoViewViewImpl(Context context) {
             super(context);
         }
 
-        public VideoViewPlayback(Context context, AttributeSet attrs) {
+        public VideoViewViewImpl(Context context, AttributeSet attrs) {
             super(context, attrs);
         }
 
-        public VideoViewPlayback(Context context, AttributeSet attrs, int defStyleAttr) {
+        public VideoViewViewImpl(Context context, AttributeSet attrs, int defStyleAttr) {
             super(context, attrs, defStyleAttr);
         }
 
