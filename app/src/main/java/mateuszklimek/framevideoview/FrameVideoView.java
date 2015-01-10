@@ -6,12 +6,12 @@ import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import org.slf4j.Logger;
@@ -88,6 +88,10 @@ public class FrameVideoView extends LinearLayout {
 
     public void setImpl(Context context, ImplType implType){
         removeAllViews();
+        if(implType == ImplType.TEXTURE_VIEW && Build.VERSION.SDK_INT < 14){
+            implType = ImplType.VIDEO_VIEW;
+            Toast.makeText(context, "Cannot use TEXTURE_VIEW impl because your device running API level 13 or lower", Toast.LENGTH_LONG).show();
+        }
         type = implType;
         switch (implType){
             case TEXTURE_VIEW:
@@ -213,8 +217,6 @@ public class FrameVideoView extends LinearLayout {
 
     class VideoViewImpl extends VideoView implements Impl, MediaPlayer.OnPreparedListener {
 
-        private Handler handler = new Handler();
-
         public VideoViewImpl(Context context) {
             super(context);
             setOnPreparedListener(this);
@@ -223,7 +225,6 @@ public class FrameVideoView extends LinearLayout {
         public VideoViewImpl(Context context, AttributeSet attrs) {
             super(context, attrs);
             setOnPreparedListener(this);
-            //setVideoURI(Uri.parse("android.resource://" + getContext().getPackageName() + "/" + videoResource));
         }
 
         public VideoViewImpl(Context context, AttributeSet attrs, int defStyleAttr) {

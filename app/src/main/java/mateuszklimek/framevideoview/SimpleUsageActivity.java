@@ -16,8 +16,8 @@ public class SimpleUsageActivity extends Activity {
         setContentView(R.layout.simple);
 
         videoView = (FrameVideoView) findViewById(R.id.frame_video_view);
+        //videoView.setImpl(this, FrameVideoView.ImplType.VIDEO_VIEW);
         videoView.setup(findViewById(R.id.video_frame), R.raw.fb);
-        videoView.setImpl(this, FrameVideoView.ImplType.VIDEO_VIEW);
         setupOtherViews();
     }
 
