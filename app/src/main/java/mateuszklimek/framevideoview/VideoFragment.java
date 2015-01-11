@@ -1,5 +1,7 @@
 package mateuszklimek.framevideoview;
 
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,16 +20,17 @@ public class VideoFragment extends Fragment {
         int position = getArguments().getInt("position");
         View root = inflater.inflate(R.layout.simple, container, false);
         videoView = (FrameVideoView) root.findViewById(R.id.frame_video_view);
-        //videoView.setImpl(inflater.getContext(), FrameVideoView.ImplType.VIDEO_VIEW);
+        videoView.setImpl(inflater.getContext(), FrameVideoView.ImplType.VIDEO_VIEW);
+        String uriString = "android.resource://" + getActivity().getPackageName() + "/" + R.raw.fb;
         switch (position){
             case 0:
-                videoView.setup(root.findViewById(R.id.video_frame), R.raw.fb);
+                videoView.setup(Uri.parse(uriString), Color.RED);
                 break;
             case 1:
-                videoView.setup(root.findViewById(R.id.video_frame), R.raw.fb);
+                videoView.setup(Uri.parse(uriString), Color.RED);
                 break;
             case 2:
-                videoView.setup(root.findViewById(R.id.video_frame), R.raw.fb);
+                videoView.setup(Uri.parse(uriString), Color.RED);
                 break;
         }
         setupOtherViews(root);

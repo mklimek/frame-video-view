@@ -2,6 +2,8 @@ package mateuszklimek.framevideoview;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -16,8 +18,9 @@ public class SimpleUsageActivity extends Activity {
         setContentView(R.layout.simple);
 
         videoView = (FrameVideoView) findViewById(R.id.frame_video_view);
-        //videoView.setImpl(this, FrameVideoView.ImplType.VIDEO_VIEW);
-        videoView.setup(findViewById(R.id.video_frame), R.raw.fb);
+        videoView.setImpl(this, FrameVideoView.ImplType.VIDEO_VIEW);
+        String uriString = "android.resource://" + getPackageName() + "/" + R.raw.fb;
+        videoView.setup(Uri.parse(uriString), Color.GREEN);
         setupOtherViews();
     }
 

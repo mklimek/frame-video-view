@@ -2,6 +2,7 @@ package mateuszklimek.framevideoview;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -10,14 +11,15 @@ import android.util.AttributeSet;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FrameVideoView extends LinearLayout {
+public class FrameVideoView extends FrameLayout {
 
     private interface Impl {
         void onResume();
@@ -32,18 +34,22 @@ public class FrameVideoView extends LinearLayout {
     private Impl impl;
     private ImplType type;
     private View placeholder;
-    private int videoResource;
+    private Uri videoUri;
 
     private static final Logger LOG = LoggerFactory.getLogger(FrameVideoView.class.getSimpleName());
 
     public FrameVideoView(Context context) {
         super(context);
         impl = getImplInstance(context);
+        placeholder = createPlaceholder(context);
+        addView(placeholder);
     }
 
     public FrameVideoView(Context context, AttributeSet attrs) {
         super(context, attrs);
         impl = getImplInstance(context, attrs);
+        placeholder = createPlaceholder(context);
+        addView(placeholder);
     }
 
     private Impl getImplInstance(Context context){
@@ -74,9 +80,17 @@ public class FrameVideoView extends LinearLayout {
         }
     }
 
-    public void setup(View videoFrame, int resource) {
-        this.videoResource = resource;
-        placeholder = videoFrame.findViewById(R.id.video_view_placeholder);
+    public void setup(Uri videoUri, int placeholderBackgroundColor) {
+        this.videoUri = videoUri;
+        placeholder.setBackgroundColor(placeholderBackgroundColor);
+    }
+
+    private View createPlaceholder(Context context) {
+        View placeholder = new View(context);
+        placeholder.setBackgroundColor(Color.RED);
+        final LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        placeholder.setLayoutParams(params);
+        return placeholder;
     }
 
     public void onResume(){
@@ -110,6 +124,7 @@ public class FrameVideoView extends LinearLayout {
                 impl = videoView;
                 break;
         }
+        addView(placeholder);
         onResume();
     }
 
@@ -148,7 +163,7 @@ public class FrameVideoView extends LinearLayout {
 
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-            LOG.trace("onSurfaceTextureAvailable resource={}", videoResource);
+            LOG.trace("onSurfaceTextureAvailable resource={}", videoUri);
             this.surface = new Surface(surface);
             prepare();
         }
@@ -156,8 +171,7 @@ public class FrameVideoView extends LinearLayout {
         private void prepare() {
             try {
                 mediaPlayer = new MediaPlayer();
-                String uriString = "android.resource://" + getContext().getPackageName() + "/" + videoResource;
-                mediaPlayer.setDataSource(getContext(), Uri.parse(uriString));
+                mediaPlayer.setDataSource(getContext(), videoUri);
                 mediaPlayer.setSurface(surface);
                 mediaPlayer.setOnPreparedListener(this);
                 mediaPlayer.setOnInfoListener(infoListener);
@@ -234,7 +248,7 @@ public class FrameVideoView extends LinearLayout {
 
         @Override
         public void onResume() {
-            setVideoURI(Uri.parse("android.resource://" + getContext().getPackageName() + "/" + videoResource));
+            setVideoURI(videoUri);
             start();
         }
 

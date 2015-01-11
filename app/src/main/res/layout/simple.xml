@@ -13,7 +13,12 @@
         android:textSize="12sp"
         />
 
-    <include layout="@layout/video_frame" />
+    <mateuszklimek.framevideoview.FrameVideoView
+        android:id="@+id/frame_video_view"
+        android:layout_width="@dimen/video_width"
+        android:layout_height="@dimen/video_height"
+        android:layout_centerInParent="true"
+        />
 
     <Button
         android:id="@+id/change_button"
