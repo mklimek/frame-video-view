@@ -20,7 +20,7 @@ public class VideoFragment extends Fragment {
         int position = getArguments().getInt("position");
         View root = inflater.inflate(R.layout.simple, container, false);
         videoView = (FrameVideoView) root.findViewById(R.id.frame_video_view);
-        videoView.setImpl(inflater.getContext(), FrameVideoView.ImplType.VIDEO_VIEW);
+        //videoView.setImpl(inflater.getContext(), FrameVideoView.ImplType.VIDEO_VIEW);
         String uriString = "android.resource://" + getActivity().getPackageName() + "/" + R.raw.fb;
         switch (position){
             case 0:

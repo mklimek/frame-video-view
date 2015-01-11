@@ -18,7 +18,7 @@ public class SimpleUsageActivity extends Activity {
         setContentView(R.layout.simple);
 
         videoView = (FrameVideoView) findViewById(R.id.frame_video_view);
-        videoView.setImpl(this, FrameVideoView.ImplType.VIDEO_VIEW);
+        //videoView.setImpl(this, FrameVideoView.ImplType.VIDEO_VIEW);
         String uriString = "android.resource://" + getPackageName() + "/" + R.raw.fb;
         videoView.setup(Uri.parse(uriString), Color.GREEN);
         setupOtherViews();
