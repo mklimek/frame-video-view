@@ -107,6 +107,14 @@ public class FrameVideoView extends FrameLayout {
         return type;
     }
 
+    public VideoView asVideoView(){
+        return impl.asVideoView();
+    }
+
+    public TextureView asTextureView(){
+        return impl.asTextureView();
+    }
+
     public void setImpl(Context context, Impl.Type implType){
         removeAllViews();
         if(implType == Impl.Type.TEXTURE_VIEW && Build.VERSION.SDK_INT < 14){
@@ -128,10 +136,6 @@ public class FrameVideoView extends FrameLayout {
         }
         addView(placeholder);
         onResume();
-    }
-
-    public Impl getImpl(){
-        return impl;
     }
 
     @TargetApi(14)
