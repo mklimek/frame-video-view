@@ -21,18 +21,20 @@ import org.slf4j.LoggerFactory;
 
 public class FrameVideoView extends FrameLayout {
 
-    private interface Impl {
+    public interface Impl {
         void onResume();
         void onPause();
-    }
+        VideoView asVideoView();
+        TextureView asTextureView();
 
-    public enum ImplType {
-        TEXTURE_VIEW,
-        VIDEO_VIEW
+        public enum Type {
+            TEXTURE_VIEW,
+            VIDEO_VIEW
+        }
     }
 
     private Impl impl;
-    private ImplType type;
+    private Impl.Type type;
     private View placeholder;
     private Uri videoUri;
 
@@ -54,12 +56,12 @@ public class FrameVideoView extends FrameLayout {
 
     private Impl getImplInstance(Context context){
         if(Build.VERSION.SDK_INT >= 14){
-            type = ImplType.TEXTURE_VIEW;
+            type = Impl.Type.TEXTURE_VIEW;
             final TextureViewImpl textureVideoPlayback = new TextureViewImpl(context);
             addView(textureVideoPlayback);
             return textureVideoPlayback;
         } else{
-            type = ImplType.VIDEO_VIEW;
+            type = Impl.Type.VIDEO_VIEW;
             final VideoViewImpl videoViewPlayback = new VideoViewImpl(context);
             addView(videoViewPlayback);
             return videoViewPlayback;
@@ -68,12 +70,12 @@ public class FrameVideoView extends FrameLayout {
 
     private Impl getImplInstance(Context context, AttributeSet attrs){
         if(Build.VERSION.SDK_INT >= 14){
-            type = ImplType.TEXTURE_VIEW;
+            type = Impl.Type.TEXTURE_VIEW;
             final TextureViewImpl textureVideoPlayback = new TextureViewImpl(context, attrs);
             addView(textureVideoPlayback);
             return textureVideoPlayback;
         } else{
-            type = ImplType.VIDEO_VIEW;
+            type = Impl.Type.VIDEO_VIEW;
             final VideoViewImpl videoViewPlayback = new VideoViewImpl(context, attrs);
             addView(videoViewPlayback);
             return videoViewPlayback;
@@ -101,14 +103,14 @@ public class FrameVideoView extends FrameLayout {
         impl.onPause();
     }
 
-    public ImplType getImplType() {
+    public Impl.Type getImplType() {
         return type;
     }
 
-    public void setImpl(Context context, ImplType implType){
+    public void setImpl(Context context, Impl.Type implType){
         removeAllViews();
-        if(implType == ImplType.TEXTURE_VIEW && Build.VERSION.SDK_INT < 14){
-            implType = ImplType.VIDEO_VIEW;
+        if(implType == Impl.Type.TEXTURE_VIEW && Build.VERSION.SDK_INT < 14){
+            implType = Impl.Type.VIDEO_VIEW;
             Toast.makeText(context, "Cannot use TEXTURE_VIEW impl because your device running API level 13 or lower", Toast.LENGTH_LONG).show();
         }
         type = implType;
@@ -126,6 +128,10 @@ public class FrameVideoView extends FrameLayout {
         }
         addView(placeholder);
         onResume();
+    }
+
+    public Impl getImpl(){
+        return impl;
     }
 
     @TargetApi(14)
@@ -227,6 +233,16 @@ public class FrameVideoView extends FrameLayout {
             prepared = false;
             startInPrepare = false;
         }
+
+        @Override
+        public VideoView asVideoView() {
+            throw new ClassCastException("FrameVideoView uses TEXTURE_VIEW implementation");
+        }
+
+        @Override
+        public TextureView asTextureView() {
+            return this;
+        }
     }
 
     class VideoViewImpl extends VideoView implements Impl, MediaPlayer.OnPreparedListener {
@@ -256,6 +272,16 @@ public class FrameVideoView extends FrameLayout {
         public void onPause() {
             placeholder.setVisibility(View.VISIBLE);
             stopPlayback();
+        }
+
+        @Override
+        public VideoView asVideoView() {
+            return this;
+        }
+
+        @Override
+        public TextureView asTextureView() {
+            throw new ClassCastException("FrameVideoView uses VIDEO_VIEW implementation");
         }
 
         @Override
