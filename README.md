@@ -1,7 +1,7 @@
 # FrameVideoView
 VideoView is the most straightforward way to show video content in layout. <br />
-It took a few lines of code to setup and show, for example, mp4 file. <br />
-It's fine when you doesn't care about UX too much, but when you do, things are going to be annoying.<br/><br/>
+It took a few lines of code to setup and show for example mp4 file. <br />
+It's fine when you don't care about UX too much, but when you do, things are going to be annoying.<br/><br/>
 Read more: <br/>
 ["How to avoid flickering and black screen issues when using VideoView?"](http://127.0.0.1:4000/frame-video-view/)<br/>
 
@@ -48,7 +48,7 @@ public class SampleActivity extends Activity {
   }
   ```
 
-If you want to do action specific for particular implementation eg. `seekTo()` from `VideoView`, you can call it like that:
+If you want to execute method for particular implementation eg. `seekTo()` from `VideoView`, you can call it like that:
 ```java
 frameVideoView.asVideoView().seekTo(x);
 ```
