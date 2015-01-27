@@ -89,7 +89,7 @@ public class FrameVideoView extends FrameLayout {
 
     private View createPlaceholder(Context context) {
         View placeholder = new View(context);
-        placeholder.setBackgroundColor(Color.RED);
+        placeholder.setBackgroundColor(Color.BLACK); // default placeholder background color
         final LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         placeholder.setLayoutParams(params);
         return placeholder;
