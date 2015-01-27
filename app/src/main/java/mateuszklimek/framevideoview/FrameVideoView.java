@@ -82,6 +82,10 @@ public class FrameVideoView extends FrameLayout {
         }
     }
 
+    public void setup(Uri videoUri) {
+        this.videoUri = videoUri;
+    }
+    
     public void setup(Uri videoUri, int placeholderBackgroundColor) {
         this.videoUri = videoUri;
         placeholder.setBackgroundColor(placeholderBackgroundColor);
