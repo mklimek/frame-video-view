@@ -54,7 +54,7 @@ frameVideoView.asVideoView().seekTo(x);
 ```
 but before, it's better to check what type of implementation is used:
 ```java
-if(videoView.getImplType() == TEXTURE_VIEW){
+if(videoView.getImplType() == VIDEO_VIEW){
     frameVideoView.asVideoView().seekTo(x);
 }
 ```
