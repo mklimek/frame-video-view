@@ -3,7 +3,7 @@ VideoView is the most straightforward way to show video content in layout. <br /
 It took a few lines of code to setup and show for example mp4 file. <br />
 It's fine when you don't care about UX too much, but when you do, things are going to be annoying.<br/><br/>
 Read more: <br/>
-["How to avoid flickering and black screen issues when using VideoView?"](http://127.0.0.1:4000/frame-video-view/)<br/>
+["How to avoid flickering and black screen issues when using VideoView?"](http://blog.brightinventions.pl/frame-video-view/)<br/>
 
 **FrameVideoView** will solve issues with VideoView. <br/>
 
