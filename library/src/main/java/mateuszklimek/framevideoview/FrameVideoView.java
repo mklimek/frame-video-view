@@ -35,7 +35,7 @@ public class FrameVideoView extends FrameLayout {
 
     private Impl impl;
     private Impl.Type type;
-    private View placeholder;
+    private View placeholderView;
     private Uri videoUri;
 
     private static final Logger LOG = LoggerFactory.getLogger(FrameVideoView.class.getSimpleName());
@@ -43,15 +43,15 @@ public class FrameVideoView extends FrameLayout {
     public FrameVideoView(Context context) {
         super(context);
         impl = getImplInstance(context);
-        placeholder = createPlaceholder(context);
-        addView(placeholder);
+        placeholderView = createPlaceholderView(context);
+        addView(placeholderView);
     }
 
     public FrameVideoView(Context context, AttributeSet attrs) {
         super(context, attrs);
         impl = getImplInstance(context, attrs);
-        placeholder = createPlaceholder(context);
-        addView(placeholder);
+        placeholderView = createPlaceholderView(context);
+        addView(placeholderView);
     }
 
     private Impl getImplInstance(Context context){
@@ -88,12 +88,12 @@ public class FrameVideoView extends FrameLayout {
     
     public void setup(Uri videoUri, int placeholderBackgroundColor) {
         this.videoUri = videoUri;
-        placeholder.setBackgroundColor(placeholderBackgroundColor);
+        placeholderView.setBackgroundColor(placeholderBackgroundColor);
     }
 
-    private View createPlaceholder(Context context) {
+    private View createPlaceholderView(Context context) {
         View placeholder = new View(context);
-        placeholder.setBackgroundColor(Color.BLACK); // default placeholder background color
+        placeholder.setBackgroundColor(Color.BLACK); // default placeholderView background color
         final LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         placeholder.setLayoutParams(params);
         return placeholder;
@@ -138,7 +138,7 @@ public class FrameVideoView extends FrameLayout {
                 impl = videoView;
                 break;
         }
-        addView(placeholder);
+        addView(placeholderView);
         onResume();
     }
 
@@ -232,7 +232,7 @@ public class FrameVideoView extends FrameLayout {
 
         @Override
         public void onPause() {
-            placeholder.setVisibility(View.VISIBLE);
+            placeholderView.setVisibility(View.VISIBLE);
             if(mediaPlayer != null) {
                 mediaPlayer.stop();
                 mediaPlayer.release();
@@ -278,7 +278,7 @@ public class FrameVideoView extends FrameLayout {
 
         @Override
         public void onPause() {
-            placeholder.setVisibility(View.VISIBLE);
+            placeholderView.setVisibility(View.VISIBLE);
             stopPlayback();
         }
 
@@ -304,7 +304,7 @@ public class FrameVideoView extends FrameLayout {
             LOG.trace("onInfo what={}, extra={}", what, extra);
             if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
                 LOG.trace("[MEDIA_INFO_VIDEO_RENDERING_START] placeholder GONE");
-                placeholder.setVisibility(View.GONE);
+                placeholderView.setVisibility(View.GONE);
                 return true;
             }
             return false;
