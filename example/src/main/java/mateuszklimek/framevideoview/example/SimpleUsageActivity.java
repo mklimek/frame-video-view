@@ -1,12 +1,13 @@
-package mateuszklimek.framevideoview;
+package mateuszklimek.framevideoview.example;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import mateuszklimek.framevideoview.FrameVideoView;
 
 public class SimpleUsageActivity extends Activity {
 
@@ -19,7 +20,7 @@ public class SimpleUsageActivity extends Activity {
 
         videoView = (FrameVideoView) findViewById(R.id.frame_video_view);
         String uriString = "android.resource://" + getPackageName() + "/" + R.raw.fb;
-        videoView.setup(Uri.parse(uriString), Color.GREEN);
+        videoView.setup(Uri.parse(uriString), getResources().getColor(R.color.background));
         setupOtherViews();
     }
 

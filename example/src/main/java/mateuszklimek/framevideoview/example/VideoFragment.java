@@ -1,6 +1,5 @@
-package mateuszklimek.framevideoview;
+package mateuszklimek.framevideoview.example;
 
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import mateuszklimek.framevideoview.FrameVideoView;
+
 public class VideoFragment extends Fragment {
 
     private FrameVideoView videoView;
@@ -20,17 +21,17 @@ public class VideoFragment extends Fragment {
         int position = getArguments().getInt("position");
         View root = inflater.inflate(R.layout.simple, container, false);
         videoView = (FrameVideoView) root.findViewById(R.id.frame_video_view);
-//        videoView.setImpl(inflater.getContext(), FrameVideoView.Impl.Type.VIDEO_VIEW);
         String uriString = "android.resource://" + getActivity().getPackageName() + "/" + R.raw.fb;
+        int backgroundColor = root.getContext().getResources().getColor(R.color.background);
         switch (position){
             case 0:
-                videoView.setup(Uri.parse(uriString), Color.RED);
+                videoView.setup(Uri.parse(uriString), backgroundColor);
                 break;
             case 1:
-                videoView.setup(Uri.parse(uriString), Color.RED);
+                videoView.setup(Uri.parse(uriString), backgroundColor);
                 break;
             case 2:
-                videoView.setup(Uri.parse(uriString), Color.RED);
+                videoView.setup(Uri.parse(uriString), backgroundColor);
                 break;
         }
         setupOtherViews(root);

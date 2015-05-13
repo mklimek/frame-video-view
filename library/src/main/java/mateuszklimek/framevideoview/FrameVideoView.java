@@ -27,7 +27,7 @@ public class FrameVideoView extends FrameLayout {
         VideoView asVideoView();
         TextureView asTextureView();
 
-        public enum Type {
+        enum Type {
             TEXTURE_VIEW,
             VIDEO_VIEW
         }
