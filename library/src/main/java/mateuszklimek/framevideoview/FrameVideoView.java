@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.SurfaceTexture;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -91,6 +92,15 @@ public class FrameVideoView extends FrameLayout {
         placeholderView.setBackgroundColor(placeholderBackgroundColor);
     }
 
+    public void setup(Uri videoUri, Drawable placeholderDrawable) {
+        this.videoUri = videoUri;
+        if(Build.VERSION.SDK_INT < 16) {
+            placeholderView.setBackgroundDrawable(placeholderDrawable);
+        } else{
+            placeholderView.setBackground(placeholderDrawable);
+        }
+    }
+
     private View createPlaceholderView(Context context) {
         View placeholder = new View(context);
         placeholder.setBackgroundColor(Color.BLACK); // default placeholderView background color
@@ -117,6 +127,10 @@ public class FrameVideoView extends FrameLayout {
 
     public TextureView asTextureView(){
         return impl.asTextureView();
+    }
+
+    public View getPlaceholderView() {
+        return placeholderView;
     }
 
     public void setImpl(Context context, Impl.Type implType){

@@ -20,7 +20,8 @@ public class SimpleUsageActivity extends Activity {
 
         videoView = (FrameVideoView) findViewById(R.id.frame_video_view);
         String uriString = "android.resource://" + getPackageName() + "/" + R.raw.fb;
-        videoView.setup(Uri.parse(uriString), getResources().getColor(R.color.background));
+        final int backgroundColor = getResources().getColor(R.color.background);
+        videoView.setup(Uri.parse(uriString), backgroundColor);
         setupOtherViews();
     }
 
