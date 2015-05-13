@@ -7,7 +7,7 @@ Read more: <br/>
 
 # How to use it?
 
-See [SimpleUsageActivity] to more details.(https://github.com/mklimek/FrameVideoView/blob/master/example/src/main/java/mateuszklimek/framevideoview/example/SimpleUsageActivity.java)
+See [SimpleUsageActivity](https://github.com/mklimek/FrameVideoView/blob/master/example/src/main/java/mateuszklimek/framevideoview/example/SimpleUsageActivity.java) to more details.
 
 If you want to execute method for particular implementation eg. `seekTo()` from `VideoView`, you can call it like that:
 ```java
