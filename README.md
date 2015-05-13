@@ -3,12 +3,17 @@ No more issues with VideoView. <br />
 Read more: <br/>
 ["How to avoid flickering and black screen issues when using VideoView?"](http://blog.brightinventions.pl/frame-video-view/)<br/>
 
-**FrameVideoView** will solve issues with VideoView. <br/>
+<br/>
 
 # How to use it?
 
 See [SimpleUsageActivity](https://github.com/mklimek/FrameVideoView/blob/master/example/src/main/java/mateuszklimek/framevideoview/example/SimpleUsageActivity.java) to more details.
 
+# How it works?
+FrameVideoView solved issues flickering and black screen issues by showing placeholder in proper time.<br/>
+If your device is running API level 16 and above it will use TextureView to increase video playback performance, otherwise VideoView will be used.
+
+# Other
 If you want to execute method for particular implementation eg. `seekTo()` from `VideoView`, you can call it like that:
 ```java
 frameVideoView.asVideoView().seekTo(x);
