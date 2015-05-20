@@ -18,7 +18,7 @@ dependencies {
     compile('mateuszklimek.framevideoview:framevideoview:1.0.0@aar')
     //other dependencies
 }
-
+```
 
 See [SimpleUsageActivity](https://github.com/mklimek/FrameVideoView/blob/master/example/src/main/java/mateuszklimek/framevideoview/example/SimpleUsageActivity.java) to more details.
 
