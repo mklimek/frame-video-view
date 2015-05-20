@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
+import android.annotation.SuppressLint;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,6 +93,7 @@ public class FrameVideoView extends FrameLayout {
         placeholderView.setBackgroundColor(placeholderBackgroundColor);
     }
 
+    @SuppressLint("NewApi")
     public void setup(Uri videoUri, Drawable placeholderDrawable) {
         this.videoUri = videoUri;
         if(Build.VERSION.SDK_INT < 16) {
