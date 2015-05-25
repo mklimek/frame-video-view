@@ -14,7 +14,7 @@ repositories {
 and then declare a dependency inside a module:
 ```groovy
 dependencies {
-    compile('mateuszklimek.framevideoview:framevideoview:1.0.0@aar')
+    compile('mateuszklimek.framevideoview:framevideoview:1.1.0@aar')
     //other dependencies
 }
 ```
