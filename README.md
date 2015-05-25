@@ -26,9 +26,9 @@ FrameVideoView solved flickering and black screen issues by showing placeholder 
 If your device is running API level 14 or higher it will use TextureView to increase video playback performance, otherwise VideoView will be used.
 
 # Manipulate video playback
-Get instance of `MediaPlayer` by call `setFrameVideoViewListener` method:
+Call `setFrameVideoViewListener` method to get instance of `MediaPlayer` by call:
 ```java
-videoView.setFrameVideoViewListener(new FrameVideoViewListener() {
+frameVideoView.setFrameVideoViewListener(new FrameVideoViewListener() {
             @Override
             public void mediaPlayerPrepared(final MediaPlayer mediaPlayer) {
                 MainActivity.this.mediaPlayer = mediaPlayer;
