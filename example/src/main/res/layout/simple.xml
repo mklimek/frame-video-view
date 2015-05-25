@@ -20,13 +20,33 @@
         android:layout_centerInParent="true"
         />
 
-    <Button
-        android:id="@+id/change_button"
-        android:text="Go to ViewPager"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        >
+
+        <Button
+            android:id="@+id/resume_button"
+            android:text="Resume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/pause_button"
+            android:text="Pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/change_button"
+            android:text="ViewPager"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
 
 </RelativeLayout>

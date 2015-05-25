@@ -1,42 +1,24 @@
 package mateuszklimek.framevideoview;
 
-import android.annotation.TargetApi;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.SurfaceTexture;
 import android.graphics.drawable.Drawable;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.view.Surface;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
-import android.widget.VideoView;
-import android.annotation.SuppressLint;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FrameVideoView extends FrameLayout {
 
-    public interface Impl {
-        void onResume();
-        void onPause();
-        VideoView asVideoView();
-        TextureView asTextureView();
-
-        enum Type {
-            TEXTURE_VIEW,
-            VIDEO_VIEW
-        }
-    }
-
     private Impl impl;
-    private Impl.Type type;
+    private ImplType implType;
     private View placeholderView;
     private Uri videoUri;
 
@@ -44,53 +26,58 @@ public class FrameVideoView extends FrameLayout {
 
     public FrameVideoView(Context context) {
         super(context);
-        impl = getImplInstance(context);
         placeholderView = createPlaceholderView(context);
+        impl = getImplInstance(context);
         addView(placeholderView);
     }
 
     public FrameVideoView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        impl = getImplInstance(context, attrs);
         placeholderView = createPlaceholderView(context);
+        impl = getImplInstance(context, attrs);
         addView(placeholderView);
     }
 
     private Impl getImplInstance(Context context){
         if(Build.VERSION.SDK_INT >= 14){
-            type = Impl.Type.TEXTURE_VIEW;
-            final TextureViewImpl textureVideoPlayback = new TextureViewImpl(context);
-            addView(textureVideoPlayback);
-            return textureVideoPlayback;
+            implType = ImplType.TEXTURE_VIEW;
+            final TextureViewImpl textureVideoImpl = new TextureViewImpl(context);
+            textureVideoImpl.init(placeholderView, videoUri);
+            addView(textureVideoImpl);
+            return textureVideoImpl;
         } else{
-            type = Impl.Type.VIDEO_VIEW;
-            final VideoViewImpl videoViewPlayback = new VideoViewImpl(context);
-            addView(videoViewPlayback);
-            return videoViewPlayback;
+            implType = ImplType.VIDEO_VIEW;
+            final VideoViewImpl videoViewImpl = new VideoViewImpl(context);
+            addView(videoViewImpl);
+            return videoViewImpl;
         }
     }
 
     private Impl getImplInstance(Context context, AttributeSet attrs){
         if(Build.VERSION.SDK_INT >= 14){
-            type = Impl.Type.TEXTURE_VIEW;
-            final TextureViewImpl textureVideoPlayback = new TextureViewImpl(context, attrs);
-            addView(textureVideoPlayback);
-            return textureVideoPlayback;
+            implType = ImplType.TEXTURE_VIEW;
+            final TextureViewImpl textureVideoImpl = new TextureViewImpl(context, attrs);
+            textureVideoImpl.init(placeholderView, videoUri);
+            addView(textureVideoImpl);
+            return textureVideoImpl;
         } else{
-            type = Impl.Type.VIDEO_VIEW;
-            final VideoViewImpl videoViewPlayback = new VideoViewImpl(context, attrs);
-            addView(videoViewPlayback);
-            return videoViewPlayback;
+            implType = ImplType.VIDEO_VIEW;
+            final VideoViewImpl videoViewImpl = new VideoViewImpl(context, attrs);
+            videoViewImpl.init(placeholderView, videoUri);
+            addView(videoViewImpl);
+            return videoViewImpl;
         }
     }
 
     public void setup(Uri videoUri) {
         this.videoUri = videoUri;
+        impl.init(placeholderView, videoUri);
     }
     
     public void setup(Uri videoUri, int placeholderBackgroundColor) {
         this.videoUri = videoUri;
         placeholderView.setBackgroundColor(placeholderBackgroundColor);
+        impl.init(placeholderView, videoUri);
     }
 
     @SuppressLint("NewApi")
@@ -119,211 +106,41 @@ public class FrameVideoView extends FrameLayout {
         impl.onPause();
     }
 
-    public Impl.Type getImplType() {
-        return type;
-    }
-
-    public VideoView asVideoView(){
-        return impl.asVideoView();
-    }
-
-    public TextureView asTextureView(){
-        return impl.asTextureView();
+    public ImplType getImplType() {
+        return implType;
     }
 
     public View getPlaceholderView() {
         return placeholderView;
     }
 
-    public void setImpl(Context context, Impl.Type implType){
+    public void setFrameVideoViewListener(FrameVideoViewListener listener){
+        impl.setFrameVideoViewListener(listener);
+    }
+
+    public void setImpl(Context context, ImplType implImplType){
         removeAllViews();
-        if(implType == Impl.Type.TEXTURE_VIEW && Build.VERSION.SDK_INT < 14){
-            implType = Impl.Type.VIDEO_VIEW;
+        if(implImplType == ImplType.TEXTURE_VIEW && Build.VERSION.SDK_INT < 14){
+            implImplType = ImplType.VIDEO_VIEW;
             Toast.makeText(context, "Cannot use TEXTURE_VIEW impl because your device running API level 13 or lower", Toast.LENGTH_LONG).show();
         }
-        type = implType;
-        switch (implType){
+        this.implType = implImplType;
+        switch (implImplType){
             case TEXTURE_VIEW:
-                final TextureViewImpl textureView = new TextureViewImpl(context);
-                addView(textureView);
-                impl = textureView;
+                final TextureViewImpl textureViewImpl = new TextureViewImpl(context);
+                textureViewImpl.init(placeholderView, videoUri);
+                addView(textureViewImpl);
+                impl = textureViewImpl;
                 break;
             case VIDEO_VIEW:
-                VideoViewImpl videoView = new VideoViewImpl(context);
-                addView(videoView);
-                impl = videoView;
+                VideoViewImpl videoViewImpl = new VideoViewImpl(context);
+                videoViewImpl.init(placeholderView, videoUri);
+                addView(videoViewImpl);
+                impl = videoViewImpl;
                 break;
         }
         addView(placeholderView);
         onResume();
     }
 
-    @TargetApi(14)
-    class TextureViewImpl extends TextureView implements
-            Impl,
-            MediaPlayer.OnPreparedListener,
-            TextureView.SurfaceTextureListener,
-            MediaPlayer.OnBufferingUpdateListener {
-
-        private Surface surface;
-        private MediaPlayer mediaPlayer;
-        private boolean prepared;
-        private boolean startInPrepare;
-
-        TextureViewImpl(Context context) {
-            super(context);
-            setSurfaceTextureListener(this);
-        }
-
-        TextureViewImpl(Context context, AttributeSet attrs) {
-            super(context, attrs);
-            setSurfaceTextureListener(this);
-        }
-
-        @Override
-        public void onPrepared(MediaPlayer mp) {
-            LOG.trace("onPrepared isPlaying={}", mp.isPlaying());
-            mp.setLooping(true);
-            if(startInPrepare){
-                mp.start();
-                startInPrepare = false;
-            }
-            prepared = true;
-        }
-
-        @Override
-        public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-            LOG.trace("onSurfaceTextureAvailable resource={}", videoUri);
-            this.surface = new Surface(surface);
-            prepare();
-        }
-
-        private void prepare() {
-            try {
-                mediaPlayer = new MediaPlayer();
-                mediaPlayer.setDataSource(getContext(), videoUri);
-                mediaPlayer.setSurface(surface);
-                mediaPlayer.setOnPreparedListener(this);
-                mediaPlayer.setOnInfoListener(infoListener);
-                mediaPlayer.setOnBufferingUpdateListener(this);
-                mediaPlayer.prepare();
-            } catch (Exception e) {
-                LOG.error("cannot prepare media player with SurfaceTexture", e);
-            }
-        }
-
-        @Override
-        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-
-        }
-
-        @Override
-        public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-            return false;
-        }
-
-        @Override
-        public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-
-        }
-
-        @Override
-        public void onBufferingUpdate(MediaPlayer mp, int percent) {
-            LOG.trace("onBufferingUpdate percent {}", percent);
-        }
-
-        @Override
-        public void onResume() {
-            if(prepared) {
-                LOG.trace("start video");
-                mediaPlayer.start();
-            } else{
-                startInPrepare = true;
-            }
-
-            if(isAvailable()){
-                onSurfaceTextureAvailable(getSurfaceTexture(), 0, 0);
-            }
-        }
-
-        @Override
-        public void onPause() {
-            placeholderView.setVisibility(View.VISIBLE);
-            if(mediaPlayer != null) {
-                mediaPlayer.stop();
-                mediaPlayer.release();
-            }
-            mediaPlayer = null;
-            prepared = false;
-            startInPrepare = false;
-        }
-
-        @Override
-        public VideoView asVideoView() {
-            throw new ClassCastException("FrameVideoView uses TEXTURE_VIEW implementation");
-        }
-
-        @Override
-        public TextureView asTextureView() {
-            return this;
-        }
-    }
-
-    class VideoViewImpl extends VideoView implements Impl, MediaPlayer.OnPreparedListener {
-
-        public VideoViewImpl(Context context) {
-            super(context);
-            setOnPreparedListener(this);
-        }
-
-        public VideoViewImpl(Context context, AttributeSet attrs) {
-            super(context, attrs);
-            setOnPreparedListener(this);
-        }
-
-        public VideoViewImpl(Context context, AttributeSet attrs, int defStyleAttr) {
-            super(context, attrs, defStyleAttr);
-            setOnPreparedListener(this);
-        }
-
-        @Override
-        public void onResume() {
-            setVideoURI(videoUri);
-            start();
-        }
-
-        @Override
-        public void onPause() {
-            placeholderView.setVisibility(View.VISIBLE);
-            stopPlayback();
-        }
-
-        @Override
-        public VideoView asVideoView() {
-            return this;
-        }
-
-        @Override
-        public TextureView asTextureView() {
-            throw new ClassCastException("FrameVideoView uses VIDEO_VIEW implementation");
-        }
-
-        @Override
-        public void onPrepared(MediaPlayer mediaPlayer) {
-            mediaPlayer.setOnInfoListener(infoListener);
-        }
-    }
-
-    private MediaPlayer.OnInfoListener infoListener = new MediaPlayer.OnInfoListener() {
-        @Override
-        public boolean onInfo(MediaPlayer mp, int what, int extra) {
-            LOG.trace("onInfo what={}, extra={}", what, extra);
-            if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-                LOG.trace("[MEDIA_INFO_VIDEO_RENDERING_START] placeholder GONE");
-                placeholderView.setVisibility(View.GONE);
-                return true;
-            }
-            return false;
-        }
-    };
 }
