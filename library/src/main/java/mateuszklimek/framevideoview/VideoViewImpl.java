@@ -53,6 +53,7 @@ public class VideoViewImpl extends VideoView implements Impl, MediaPlayer.OnPrep
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
+        mediaPlayer.setLooping(true);
         mediaPlayer.setOnInfoListener(new InfoListener(placeholderView));
         if(listener != null){
            listener.mediaPlayerPrepared(mediaPlayer);

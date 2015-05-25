@@ -21,11 +21,13 @@ public class FrameVideoView extends FrameLayout {
     private ImplType implType;
     private View placeholderView;
     private Uri videoUri;
+    private Context context;
 
     private static final Logger LOG = LoggerFactory.getLogger(FrameVideoView.class.getSimpleName());
 
     public FrameVideoView(Context context) {
         super(context);
+        this.context = context;
         placeholderView = createPlaceholderView(context);
         impl = getImplInstance(context);
         addView(placeholderView);
@@ -33,6 +35,7 @@ public class FrameVideoView extends FrameLayout {
 
     public FrameVideoView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         placeholderView = createPlaceholderView(context);
         impl = getImplInstance(context, attrs);
         addView(placeholderView);
@@ -118,14 +121,14 @@ public class FrameVideoView extends FrameLayout {
         impl.setFrameVideoViewListener(listener);
     }
 
-    public void setImpl(Context context, ImplType implImplType){
+    public void setImpl(ImplType implType){
         removeAllViews();
-        if(implImplType == ImplType.TEXTURE_VIEW && Build.VERSION.SDK_INT < 14){
-            implImplType = ImplType.VIDEO_VIEW;
+        if(implType == ImplType.TEXTURE_VIEW && Build.VERSION.SDK_INT < 14){
+            implType = ImplType.VIDEO_VIEW;
             Toast.makeText(context, "Cannot use TEXTURE_VIEW impl because your device running API level 13 or lower", Toast.LENGTH_LONG).show();
         }
-        this.implType = implImplType;
-        switch (implImplType){
+        this.implType = implType;
+        switch (implType){
             case TEXTURE_VIEW:
                 final TextureViewImpl textureViewImpl = new TextureViewImpl(context);
                 textureViewImpl.init(placeholderView, videoUri);
