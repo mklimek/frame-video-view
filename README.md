@@ -2,7 +2,6 @@
 No more issues with VideoView. <br />
 Read more: <br/>
 ["How to avoid flickering and black screen issues when using VideoView?"](http://blog.brightinventions.pl/frame-video-view/)<br/>
-<br/>
 # How to use it?
 Add `http://bright.github.io/maven-repo/` to your repositories:
 ```groovy
@@ -18,7 +17,7 @@ dependencies {
     compile('mateuszklimek.framevideoview:framevideoview:1.0.0@aar')
     //other dependencies
 }
-
+```
 
 See [SimpleUsageActivity](https://github.com/mklimek/FrameVideoView/blob/master/example/src/main/java/mateuszklimek/framevideoview/example/SimpleUsageActivity.java) to more details.
 
