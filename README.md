@@ -26,14 +26,14 @@ See [SimpleUsageActivity](https://github.com/mklimek/FrameVideoView/blob/master/
 FrameVideoView solved flickering and black screen issues by showing placeholder in proper time.<br/>
 If your device is running API level 14 or higher it will use TextureView to increase video playback performance, otherwise VideoView will be used.
 
-# Other
-If you want to execute method for particular implementation eg. `seekTo()` from `VideoView`, you can call it like that:
+# Manipulate video playback
+Get instance of `MediaPlayer` by call `setFrameVideoViewListener` method:
 ```java
-frameVideoView.asVideoView().seekTo(x);
+videoView.setFrameVideoViewListener(new FrameVideoViewListener() {
+            @Override
+            public void mediaPlayerPrepared(final MediaPlayer mediaPlayer) {
+                MainActivity.this.mediaPlayer = mediaPlayer;
+            }
+        });
 ```
-but before, it's better to check what type of implementation is used:
-```java
-if(videoView.getImplType() == VIDEO_VIEW){
-    frameVideoView.asVideoView().seekTo(x);
-}
-```
+after that you can call pause, resume, looping and other methods available in `MediaPlayer`.
