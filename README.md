@@ -19,7 +19,7 @@ dependencies {
 }
 ```
 
-See [SimpleUsageActivity](https://github.com/mklimek/FrameVideoView/blob/master/example/src/main/java/mateuszklimek/framevideoview/example/SimpleUsageActivity.java) to more details.
+See [SimpleUsageActivity](https://github.com/mklimek/FrameVideoView/blob/master/example/src/main/java/mateuszklimek/framevideoview/example/SimpleUsageActivity.java) for more details.
 
 # How it works?
 FrameVideoView solved flickering and black screen issues by showing placeholder in proper time.<br/>
