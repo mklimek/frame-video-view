@@ -48,15 +48,15 @@ class TextureViewImpl extends TextureView implements
     @Override
     public void onPrepared(MediaPlayer mp) {
         LOG.trace("onPrepared isPlaying={}", mp.isPlaying());
-        if(listener != null){
-            listener.mediaPlayerPrepared(mp);
-        }
         mp.setLooping(true);
         if(startInPrepare){
             mp.start();
             startInPrepare = false;
         }
         prepared = true;
+        if(listener != null){
+            listener.mediaPlayerPrepared(mp);
+        }
     }
 
     @Override
