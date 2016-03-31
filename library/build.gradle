@@ -1,17 +1,17 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven-publish'
+apply plugin: 'com.github.dcendents.android-maven'  
 
-version = "1.1.1"
+group='com.github.mklimek'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "21.1.2"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         minSdkVersion 10
         targetSdkVersion 23
         versionCode 1
-        versionName version
+        versionName "1.0.0"
     }
 }
 
@@ -20,32 +20,3 @@ dependencies {
         transitive = true
     }
 }
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId 'mateuszklimek.framevideoview'
-            artifactId 'framevideoview'
-            version version
-            artifact "${project.buildDir}/outputs/aar/library-release.aar"
-
-            pom.withXml {
-                def dependenciesNode = asNode().appendNode('dependencies')
-                configurations.compile.allDependencies.each {
-                    def dependencyNode = dependenciesNode.appendNode('dependency')
-                    dependencyNode.appendNode('groupId', it.group)
-                    dependencyNode.appendNode('artifactId', it.name)
-                    dependencyNode.appendNode('version', it.version)
-                }
-            }
-        }
-    }
-    repositories {
-        maven {
-            // change to point to your repo, e.g. http://my.org/repo
-            url "$System.env.HOME/Projects/maven-repo"
-        }
-    }
-}
-
-publish.dependsOn(build)
