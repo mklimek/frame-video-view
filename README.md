@@ -3,7 +3,7 @@ No more issues with VideoView. <br />
 Read more: <br/>
 ["How to avoid flickering and black screen issues when using VideoView?"](http://blog.brightinventions.pl/frame-video-view/)<br/>
 # How to use it?
-Add it in your root build.gradle at the end of repositories:
+Step 1. Add it in your root build.gradle at the end of repositories:
 ```groovy
 	allprojects {
 		repositories {
