@@ -1,4 +1,4 @@
-# FrameVideoView
+# frame-viedo-view
 No more issues with VideoView. <br />
 Read more: <br/>
 ["How to avoid flickering and black screen issues when using VideoView?"](http://blog.brightinventions.pl/frame-video-view/)<br/>
