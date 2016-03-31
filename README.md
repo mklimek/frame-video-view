@@ -3,23 +3,23 @@ No more issues with VideoView. <br />
 Read more: <br/>
 ["How to avoid flickering and black screen issues when using VideoView?"](http://blog.brightinventions.pl/frame-video-view/)<br/>
 # How to use it?
-Add `http://bright.github.io/maven-repo/` to your repositories:
+Add it in your root build.gradle at the end of repositories:
 ```groovy
-repositories {
-    maven {
-        url "http://bright.github.io/maven-repo/"
-    }
-}
+	allprojects {
+		repositories {
+			...
+			maven { url "https://jitpack.io" }
+		}
+	}
 ```
-and then declare a dependency inside a module:
+Step 2. Add the dependency
 ```groovy
-dependencies {
-    compile('mateuszklimek.framevideoview:framevideoview:1.1.1@aar')
-    //other dependencies
-}
+	dependencies {
+	        compile 'com.github.mklimek:frame-video-view:1.2.0'
+	}
 ```
 
-See [SimpleUsageActivity](https://github.com/mklimek/FrameVideoView/blob/master/example/src/main/java/mateuszklimek/framevideoview/example/SimpleUsageActivity.java) for more details.
+See [example](https://gist.github.com/mklimek/1a7e5497292b9d945ef1e143d152e312) for more details.
 
 # How it works?
 FrameVideoView solved flickering and black screen issues by showing placeholder in proper time.<br/>
