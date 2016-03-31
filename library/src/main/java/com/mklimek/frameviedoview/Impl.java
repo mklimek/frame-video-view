@@ -1,4 +1,4 @@
-package mateuszklimek.framevideoview;
+package com.mklimek.frameviedoview;
 
 import android.net.Uri;
 import android.view.View;

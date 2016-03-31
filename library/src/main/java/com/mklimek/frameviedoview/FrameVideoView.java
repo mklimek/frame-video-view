@@ -1,4 +1,4 @@
-package mateuszklimek.framevideoview;
+package com.mklimek.frameviedoview;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

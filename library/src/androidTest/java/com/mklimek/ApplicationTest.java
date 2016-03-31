@@ -1,4 +1,4 @@
-package mateuszklimek.framevideoview;
+package com.mklimek;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
