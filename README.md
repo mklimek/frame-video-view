@@ -15,9 +15,10 @@ Step 1. Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 ```groovy
 	dependencies {
-	        compile 'com.github.mklimek:frame-video-view:1.2.0'
+	        compile 'com.github.mklimek:frame-video-view:$RELEASE_VERSION'
 	}
 ```
+Get `$RELEASE_VERSION` from [here](https://github.com/mklimek/frame-video-view/releases).
 
 See [example](https://gist.github.com/mklimek/1a7e5497292b9d945ef1e143d152e312) for more details.
 
