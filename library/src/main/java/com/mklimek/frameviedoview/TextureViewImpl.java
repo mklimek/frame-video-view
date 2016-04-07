@@ -32,17 +32,21 @@ class TextureViewImpl extends TextureView implements
 
     public TextureViewImpl(Context context) {
         super(context);
+        setSurfaceTextureListener(this);
     }
 
     public TextureViewImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setSurfaceTextureListener(this);
     }
 
     @Override
     public void init(View placeholderView, Uri videoUri) {
         this.placeholderView = placeholderView;
         this.videoUri = videoUri;
-        setSurfaceTextureListener(this);
+        if(surface != null) {
+            prepare();
+        }
     }
 
     @Override
@@ -61,9 +65,11 @@ class TextureViewImpl extends TextureView implements
 
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        LOG.trace("onSurfaceTextureAvailable resource={}", videoUri);
+        LOG.trace("onSurfaceTextureAvailable");
         this.surface = new Surface(surface);
-        prepare();
+        if(!prepared && videoUri != null){
+            prepare();
+        }
     }
 
     private void prepare() {

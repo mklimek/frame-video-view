@@ -45,7 +45,6 @@ public class FrameVideoView extends FrameLayout {
         if(Build.VERSION.SDK_INT >= 14){
             implType = ImplType.TEXTURE_VIEW;
             final TextureViewImpl textureVideoImpl = new TextureViewImpl(context);
-            textureVideoImpl.init(placeholderView, videoUri);
             addView(textureVideoImpl);
             return textureVideoImpl;
         } else{
@@ -60,13 +59,11 @@ public class FrameVideoView extends FrameLayout {
         if(Build.VERSION.SDK_INT >= 14){
             implType = ImplType.TEXTURE_VIEW;
             final TextureViewImpl textureVideoImpl = new TextureViewImpl(context, attrs);
-            textureVideoImpl.init(placeholderView, videoUri);
             addView(textureVideoImpl);
             return textureVideoImpl;
         } else{
             implType = ImplType.VIDEO_VIEW;
             final VideoViewImpl videoViewImpl = new VideoViewImpl(context, attrs);
-            videoViewImpl.init(placeholderView, videoUri);
             addView(videoViewImpl);
             return videoViewImpl;
         }
