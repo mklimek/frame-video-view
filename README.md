@@ -17,7 +17,7 @@ Step 1. Add it in your root build.gradle at the end of repositories:
 		}
 	}
 ```
-Step 2. Add the dependency
+Step 2. Add the dependency:
 ```groovy
 	dependencies {
 	        compile 'com.github.mklimek:frame-video-view:$RELEASE_VERSION'
@@ -26,7 +26,7 @@ Step 2. Add the dependency
 Get `$RELEASE_VERSION` from [here](https://github.com/mklimek/frame-video-view/releases).
 
 
-Step 3. Add view in xml
+Step 3. Add view in xml:
 ```xml
 <com.mklimek.frameviedoview.FrameVideoView
     android:id="@+id/frame_video_view"
@@ -35,7 +35,7 @@ Step 3. Add view in xml
   />
 ```
 
-Step 4. Setup
+Step 4. Setup resource and `FrameVideoViewListener`:
 ```java
 frameVideoView = (FrameVideoView) findViewById(R.id.frameVideoView);
 frameVideoView.setup(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.fb));
