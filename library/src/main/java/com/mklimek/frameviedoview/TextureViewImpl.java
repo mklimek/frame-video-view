@@ -44,6 +44,9 @@ class TextureViewImpl extends TextureView implements
     public void init(View placeholderView, Uri videoUri) {
         this.placeholderView = placeholderView;
         this.videoUri = videoUri;
+        if(prepared){
+            release();
+        }
         if(surface != null) {
             prepare();
         }
@@ -123,6 +126,10 @@ class TextureViewImpl extends TextureView implements
     @Override
     public void onPause() {
         placeholderView.setVisibility(View.VISIBLE);
+        release();
+    }
+
+    private void release() {
         if(mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
