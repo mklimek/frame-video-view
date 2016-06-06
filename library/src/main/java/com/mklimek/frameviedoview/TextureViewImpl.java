@@ -96,6 +96,8 @@ class TextureViewImpl extends TextureView implements
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        LOG.trace("onSurfaceTextureDestroyed");
+        removeVideo();
         return false;
     }
 
@@ -125,8 +127,7 @@ class TextureViewImpl extends TextureView implements
 
     @Override
     public void onPause() {
-        placeholderView.setVisibility(View.VISIBLE);
-        release();
+        removeVideo();
     }
 
     private void release() {
@@ -137,6 +138,11 @@ class TextureViewImpl extends TextureView implements
         mediaPlayer = null;
         prepared = false;
         startInPrepare = false;
+    }
+
+    private void removeVideo(){
+        placeholderView.setVisibility(View.VISIBLE);
+        release();
     }
 
     @Override
