@@ -85,7 +85,10 @@ class TextureViewImpl extends TextureView implements
             mediaPlayer.setOnBufferingUpdateListener(this);
             mediaPlayer.prepare();
         } catch (Exception e) {
-            LOG.error("cannot prepare media player with SurfaceTexture", e);
+            if ( listener != null ) {
+                listener.mediaPlayerPrepareFailed( mediaPlayer, e.toString() );
+            }
+            removeVideo();
         }
     }
 
