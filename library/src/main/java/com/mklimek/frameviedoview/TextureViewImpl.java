@@ -87,8 +87,8 @@ class TextureViewImpl extends TextureView implements
         } catch (Exception e) {
             if ( listener != null ) {
                 listener.mediaPlayerPrepareFailed( mediaPlayer, e.toString() );
-                removeVideo();
             }
+            removeVideo();
         }
     }
 
