@@ -12,7 +12,7 @@ allprojects {
     repositories {
         jcenter()
         maven {
-            url "http://bright.github.io/maven-repo/"
+            url "https://jitpack.io"
         }
     }
 }
