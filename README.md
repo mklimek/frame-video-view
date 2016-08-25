@@ -1,3 +1,4 @@
+[![](https://jitpack.io/v/mklimek/frame-video-view.svg)](https://jitpack.io/#mklimek/frame-video-view)
 # frame-viedo-view
 No more issues with VideoView. <br />
 Read more in [blog post](http://blog.brightinventions.pl/frame-video-view/) I wrote.<br/>
