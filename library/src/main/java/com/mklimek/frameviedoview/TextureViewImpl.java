@@ -144,7 +144,9 @@ class TextureViewImpl extends TextureView implements
     }
 
     private void removeVideo(){
-        placeholderView.setVisibility(View.VISIBLE);
+        if(placeholderView != null){    
+            placeholderView.setVisibility(View.VISIBLE);
+        }
         release();
     }
 
