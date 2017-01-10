@@ -26,7 +26,7 @@ Step 2. Add the dependency:
 	        compile 'com.github.mklimek:frame-video-view:$RELEASE_VERSION'
 	}
 ```
-Get `$RELEASE_VERSION` from [here](https://github.com/mklimek/frame-video-view/releases).
+Current `$RELEASE_VERSION` is [![](https://jitpack.io/v/mklimek/frame-video-view.svg)](https://jitpack.io/#mklimek/frame-video-view)
 
 
 Step 3. Add view in xml:
