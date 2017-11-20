@@ -1,10 +1,10 @@
 [![](https://jitpack.io/v/mklimek/frame-video-view.svg)](https://jitpack.io/#mklimek/frame-video-view)
 # frame-viedo-view
-No more issues with VideoView. <br />
-Read more in [blog post](http://blog.brightinventions.pl/frame-video-view/) I wrote.<br/>
+Do you have any display issues when using VideoView? <br />
+Read more in [blog post](http://mklimek.github.io/frame-video-view/) I wrote.<br/>
 
 # How it works?
-FrameVideoView solved flickering and black screen issues by showing placeholder in proper time.<br/>
+FrameVideoView solves flickering and black screen issues by showing placeholder in the proper time.<br/>
 Placeholder is a simple `View` on top of the `VideoView`. Placeholder is visisble just after `onPause` is called and invisible when `onResume` is called.<br/>
 It allows to hide `VideoView` during screen transitions which causes strange issues.
 If your device is running API level 14 or higher it will use TextureView to increase video playback performance, otherwise VideoView will be used.
