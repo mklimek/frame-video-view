@@ -88,6 +88,7 @@ public class FrameVideoView extends FrameLayout {
         } else{
             placeholderView.setBackground(placeholderDrawable);
         }
+        impl.init(placeholderView, videoUri);
     }
 
     private View createPlaceholderView(Context context) {
