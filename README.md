@@ -1,6 +1,6 @@
 [![](https://jitpack.io/v/mklimek/frame-video-view.svg)](https://jitpack.io/#mklimek/frame-video-view)
 # frame-viedo-view
-Have you got any display issues when using VideoView? <br />
+Have you got any display issues using VideoView? <br />
 I had too. I wrote a [blog post](http://mklimek.github.io/frame-video-view/) where you can find more details about these issues and how I solved them.<br/>
 
 # How it works?
