@@ -44,12 +44,12 @@ frameVideoView = (FrameVideoView) findViewById(R.id.frameVideoView);
 frameVideoView.setup(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.fb));
 frameVideoView.setFrameVideoViewListener(new FrameVideoViewListener() {
       @Override
-      public void mediaPlayerPrepared(final MediaPlayer mediaPlayer) {
+      public void mediaPlayerPrepared(MediaPlayer mediaPlayer) {
           mediaPlayer.start();
       }
       
       @Override
-      void mediaPlayerPrepareFailed( MediaPlayer mediaPlayer, String error ){
+      void mediaPlayerPrepareFailed(MediaPlayer mediaPlayer, String error){
       }
 });
 ```
