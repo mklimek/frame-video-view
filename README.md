@@ -4,7 +4,7 @@ Have you got any display issues using VideoView? <br />
 I had too. I wrote a [blog post](http://mklimek.github.io/frame-video-view/) where you can find more details about these issues and how I solved them.<br/>
 
 # How it works?
-FrameVideoView solves flickering and black screen issues by showing placeholder in the proper time.<br/>
+FrameVideoView solves flickering and black screen issues by showing placeholder on the proper time.<br/>
 Placeholder is a simple `View` on top of the `VideoView`. Placeholder is visisble just after `onPause` is called and invisible when `onResume` is called.<br/>
 It allows to hide `VideoView` during screen transitions which causes strange issues.
 If your device is running API level 14 or higher it will use TextureView to increase video playback performance, otherwise VideoView will be used.
